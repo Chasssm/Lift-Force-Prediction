@@ -16,9 +16,10 @@ alpha = (np.pi/2-theta_b)/2  # 1/2 theta_c
 def get_new_triangle(A, B, C, s):
     delta_b = s/np.tan(theta_b)+s/np.sin(theta_b)
     delta_c = s/np.tan(alpha)
-    A1 = [s,s]
-    B1 = [s,y_max-delta_b]
-    C1 = [x_max-delta_c,s]
+    A1 = [(A[0]+s),(A[1]+s)]
+    B1 = [(B[0]+s),(B[1]-delta_b)]
+    C1 = [(C[0]-delta_c),(C[1]+s)]
     return A1, B1, C1
 
 print(get_new_triangle(A, B, C, s[0]))
+
