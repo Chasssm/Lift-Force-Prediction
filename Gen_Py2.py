@@ -3,13 +3,12 @@ from matplotlib import pyplot as plt
 
 x_max = 200
 y_max = 100
-s = [2.5, 5, 8, 10]
-N = [50, 40, 40, 20]
+s = [2.5, 10, 10, 10]
+N = [50, 30, 20, 10]
 
 A = [0,0]
 B = [0,y_max]
 C = [x_max, 0]
-store = []
 
 theta_b = np.arctan(x_max/y_max)
 alpha = (np.pi/2-theta_b)/2  # 1/2 theta_c
@@ -24,10 +23,10 @@ def get_new_triangle(A, B, C, s):
 
 # print(get_new_triangle(A, B, C, s[0]))
 
-def get_side_line(A, B):
+def get_side_line(B, C):
     # Calculate the coefficients
-    x = [A[0], B[0]]
-    y = [A[1], B[1]]
+    x = [B[0], C[0]]
+    y = [B[1], C[1]]
     coefficients = np.polyfit(x, y, 1)
     
     a = coefficients[0] # Zero Order, Constant Term
@@ -47,10 +46,18 @@ def get_side_line(A, B):
     # plt.grid('on')
     # plt.show()
 
-def get_points(store, A, B, C, N, co):
-    Na = int(N/3)
-    Nb = int(N/3)
-    Nc = int(N/3)    # Adjust later, refer to the ratio of triangle geomerty 
+def get_points(A, B, C, N):
+    
+    store=[]
+    ab = B[1] - A[1]
+    ac = C[0] - A[0]
+    bc = ac / np.sin(theta_b)
+    l_total = ab + ac + bc
+    
+    Nb = int(N * ac / l_total)
+    Nc = int(N * ab / l_total)
+    Na = N - Nb - Nc
+    
     # On line AB, # of points = Nc
     delta_ab = (B[1] - A[1]) / (Nc + 1)
     d1 = 0
@@ -66,29 +73,29 @@ def get_points(store, A, B, C, N, co):
         store.append([(A[0] + d2), A[1]])
 
     # On line BC, # of points = Na
+    co = get_side_line(B, C)
     delta_x = (C[0] - B[0]) / (Na + 1)   # Increment along x direction
     d3 = B[0]
     for i in range(Na):
         d3 = d3 + delta_x
         store.append([d3, (co[0]*d3 + co[1])])
     
-    store = np.array(store)
+    # Coordinates
+    store.extend([A, B, C])
+    
     return store
 
-
+pts=[]
 for i in range(len(s)):
-    new_coor = (get_new_triangle(A, B, C, s[i]))   # return new_coor
-    A1 = new_coor[0]
-    B1 = new_coor[1]
-    C1 = new_coor[2]
-    co = get_side_line(B1, C1)
-    new_store = get_points(store, A, B, C, N[i], co)
+    A1, B1, C1 = get_new_triangle(A, B, C, s[i])   # return new_coor
+    pts.extend(get_points(A1, B1, C1, N[i]))
+    A, B, C = A1, B1, C1
 
-    
 
 # Visualize
-x1 = new_store[:,0]
-y1 = new_store[:,1]
+pts = np.array(pts)
+x1 = pts[:,0]
+y1 = pts[:,1]
 #plt.figure(figsize = (150, 60))
 plt.figure(figsize=(10,5))
 plt.plot((0, 0), (0, y_max), scaley = False,c='blue',alpha = 0.75)
