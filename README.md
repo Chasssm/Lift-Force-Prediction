@@ -1,0 +1,1 @@
+<a href="https://githubtocolab.com/Chasssm/Lift-Force-Prediction/blob/main/Gen_Py3.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/></a>
