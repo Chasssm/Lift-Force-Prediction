@@ -2,10 +2,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #***********************************INPUTS**********************************
-X_MAX = 200 #width
+X_MAX = 300 #width
 Y_MAX = 100 #height
-N = [100, 100, 50, 50] #number of points per interior triangle
-S_SET = [5, 5, 50, 50] #step size (um) between interior triangles, {S_SET} = {N} - 1
+N = [50, 50, 50, 50, 50] #number of points per interior triangle
+S_SET = [10, 10, 10, 10, 10] #step size (um) between interior triangles, {S_SET} = {N} - 1
 #***************************************************************************
 
 def get_new_triangle(A, B, C, s_a, s_b, s_c, s_set, theta_b):
@@ -125,7 +125,7 @@ def run():
     # Visualize
     visualize(pts, Cp)
     pts = np.array(pts)
-    print(pts)
+    np.savetxt('output.csv', pts, delimiter=',')
 
 if __name__ == '__main__':
     run()
